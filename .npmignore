@@ -1,24 +1,2 @@
-# Git #
-.git
-
-# IDE #
-*.sublime-*
-
-# Nodejs #
-lib-cov
-*.seed
-*.log
-*.csv
-*.dat
-*.out
-*.pid
-*.gz
-pids
-logs
-results
-npm-debug.log
-node_modules
-
-# System #
-~*
-*~
+.idea
+/config.dat

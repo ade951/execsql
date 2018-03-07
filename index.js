@@ -1,21 +1,40 @@
-var mysql = require('mysql');
-var fs = require('fs');
-var config = require('./config');
+var fs = require('fs'),
+	_ = require('underscore'),
+	mysql = require('mysql'),
+	config = {
+		multipleStatements: true
+	},
+	conn;
 
-function execsql( filename ){
-fs.readFile(filename, 'utf8', function(err, data){
-	if(err) throw err;
-	
-	var conn = mysql.createConnection( config );
-	conn.connect();
-	conn.query(data, function(err, results){
-		if(err) throw err;
-		for(var i=0; i<results.length; i++){
-			console.log( i + ':' + JSON.stringify(results[i]) );
+function exec(sql, callback) {
+	conn.query(sql, function (err, results) {
+		if (!_.isArray(results)) {
+			results = [results];
+		}
+		if (typeof callback === 'function') {
+			callback(err, results);
 		}
 	});
-	conn.end();
-});
+	return this;
 }
 
-module.exports = execsql;
+function execFile(filename, callback) {
+	fs.readFile(filename, 'utf8', function (err, data) {
+		if (err) throw err;
+		exec(data, callback);
+	});
+	return this;
+}
+
+exports.exec = exec;
+exports.execFile = execFile;
+exports.end = function () {
+	conn.end();
+	return this;
+};
+exports.config = function (options) {
+	_.extend(config, _.pick(options, ['host', 'port', 'user', 'password']));
+	conn = mysql.createConnection(config);
+	conn.connect();
+	return this;
+};
