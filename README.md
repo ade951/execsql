@@ -4,6 +4,15 @@ execsql
 An npm project. Node.js
 Execute your *.sql files which contain multiple sql statements.
 
+### SQL File Format
+
+Make sure each `query` is in a single line.
+	```sql
+	SELECT * FROM table_name;
+	SELECT * FROM table_name;	
+	```
+
+
 ## Usage
 
 ### As a CLI tool
@@ -55,6 +64,9 @@ Execute your *.sql files which contain multiple sql statements.
 		.execFile(sqlFile, function (err, results) {
 			if (err) throw err;
 			console.log(results);
-		})
-		.end();
+			if(err === null && results === null) {
+				// comepleted
+				console.log('Execution Completed');
+			}
+		});		
 	```

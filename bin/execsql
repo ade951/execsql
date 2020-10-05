@@ -44,7 +44,10 @@ if (isConfig) {
 		results.forEach(function (result, i) {
 			console.log(i + ' -- \r\n' + JSON.stringify(result));
 		});
-		execsql.end();
+		if(err === null && results === null) {
+			// comepleted
+			console.log('Execution Completed');
+		}
 		process.exit(0);
 	}
 }
